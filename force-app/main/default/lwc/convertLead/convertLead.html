@@ -1,0 +1,478 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 07-12-2023
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+    <div class="modal-container scrollable slds-modal__container" style="width: 945px">
+        <div class="modal-header slds-modal__header">
+            <h2 class="title slds-text-heading--medium slds-hyphenate">Convert Lead </h2>
+        </div>
+        <div class="modal-body scrollable slds-modal__content slds-p-around_medium" data-scoped-scroll="true"
+            style="width: 945px;">
+
+            <lightning-accordion class="example-accordion" onsectiontoggle={handleToggleSection} active-section-name="A"
+                allow-multiple-sections-open>
+
+                <lightning-accordion-section name="A" label="Account">
+                    <fieldset class="slds-form-element runtime_sales_leadConvertSectionDesktop">
+                        <div class="slds-form-element__control">
+                            <div style="display: flex" class="entityPanel slds-box_border expand">
+                                <div class="col1">
+                                    <lightning-accordion-section name="A" label="Account" if:true={isCreateNew}>
+                                    </lightning-accordion-section>
+                                    <lightning-accordion-section name="A" label="Account" if:false={isCreateNew}>
+                                    </lightning-accordion-section>
+                                </div>
+                                <div class="col2">
+                                    <div class="createPanel">
+                                        <div class="header runtime_sales_leadConvertCreatePanelDesktop slds-p-around_small">
+                                            <span class="slds-radio">
+                                                <input type="radio" id="radio-61" value="radio-61" name="default"
+                                                    checked={isCreateNew} onchange={handleRadioChange} />
+                                                <label class="slds-radio__label" for="radio-61">
+                                                    <span class="slds-radio_faux"></span>
+                                                    <span class="slds-form-element__label">Create New</span>
+                                                </label>
+                                            </span>
+                                        </div>
+                                        <div
+                                            class="createPanelDetail slds-box_border runtime_sales_leadConvertCreatePanelDesktop">
+                                            <div class="createPanelExpanded">
+                                                <div>
+                                                    <div class="uiInput uiInputText uiInput--default uiInput--input">
+                                                        <label class="uiLabel-left form-element__label uiLabel">
+                                                            <span class=""></span><span title="required"
+                                                                class="required "></span>
+                                                        </label>
+                                                        <input aria-describedby="" placeholder="" type="text"
+                                                            value={accountName} onchange={handleAccountNameChange}
+                                                            class=" input" required="" data-interactive-lib-uid="13"
+                                                            aria-required="true">
+                                                    </div>
+                                                </div>
+                                                <div class="recordType"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div aria-hidden="true" class="col3">
+                                    <div class="divisor"><span>- OR -</span></div>
+                                    <div class="vertical-line"></div>
+                                </div>
+                                <div class="col4">
+                                    <div class="matchPanel">
+                                        <div class="runtime_sales_leadConvertMatchPanelDesktop">
+                                            <div class="header">
+                                                <span class="slds-radio">
+                                                    <input type="radio" id="radio-62" value="radio-62" name="default"
+                                                        checked={isExistingRecordSearch} onchange={handleRadioChange} />
+                                                    <label class="slds-radio__label" for="radio-62">
+                                                        <span class="slds-radio_faux"></span>
+                                                        <span class="slds-form-element__label">Choose Existing</span>
+                                                    </label>
+                                                </span>
+                                            </div>
+                                            <div class="matchPanelDetail">
+                                                <div class="">
+                                                    <div>
+                                                        <div
+                                                            class="uiInput forceSearchInputLookupDesktop uiInput--default">
+
+                                                            <div class="contentWrapper">
+                                                                <div
+                                                                    class="inputWrapper slds-grid slds-grid_vertical-align-center slds-p-right_x-small">
+                                                                    <div class="autocompleteWrapper slds-grow">
+                                                                        <lightning-input type="search"
+                                                                            id="combobox-id-16" value={actName}
+                                                                            onchange={searchHandleAccountKeyChange}
+                                                                            onkeydown={searchHandleAccountClick}
+                                                                            onclick={searchHandleAccountClick}
+                                                                            onblur={searchHandleAccountClick}
+                                                                            aria-activedescendant="option1"
+                                                                            label='Existing Account'
+                                                                            aria-autocomplete="list"
+                                                                            aria-controls="listbox-id-12" role="textbox"
+                                                                            placeholder="Search..."></lightning-input>
+                                                                    </div>
+                                                                    <div if:true={messageResult}>
+                                                                        0 Account matches!
+                                                                    </div>
+                                                                    <!-- Display search results -->
+                                                                    <template if:true={showSearchedValues}>
+                                                                        <div class="slds-box"
+                                                                            style="height: 130px; overflow-y: scroll;">
+                                                                            <ul class="" role="">
+                                                                                <template for:each={accountList}
+                                                                                    for:item="actObj">
+                                                                                    <li class="slds-p-around_x-small"
+                                                                                        style="cursor: pointer;"
+                                                                                        key={actObj.Id}
+                                                                                        onclick={parentHandleAccountAction}
+                                                                                        data-value={actObj.Id}
+                                                                                        data-label={actObj.Name}>
+                                                                                        {actObj.Name}
+                                                                                    </li>
+                                                                                </template>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </template>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="slds-hidden">
+                                                                <lightning-icon icon-name="utility:info_alt"
+                                                                    class="slds-icon-utility-info-alt slds-icon_container">
+                                                                    <span part="boundary">
+                                                                        <lightning-primitive-icon>
+                                                                            <svg class="slds-icon slds-icon_xx-small"
+                                                                                focusable="false" data-key="info_alt"
+                                                                                aria-hidden="true" viewBox="0 0 52 52"
+                                                                                part="icon">
+                                                                            </svg>
+                                                                        </lightning-primitive-icon>
+                                                                    </span>
+                                                                </lightning-icon>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </lightning-accordion-section>
+
+                <lightning-accordion-section name="B" label="Contact">
+                    <template if:false={SkipContact}>
+                        <fieldset class="slds-form-element runtime_sales_leadConvertSectionDesktop">
+                            <legend class="slds-form-element__legend slds-form-element__label slds-assistive-text">Contact
+                            </legend>
+                            <div class="slds-form-element__control">
+                                <div style="display: flex" class="entityPanel slds-box_border expand">
+                                    <div class="col1">
+                                        <lightning-accordion-section name="B" label="Contact"
+                                            if:true={isCreateNew}></lightning-accordion-section>
+                                        <lightning-accordion-section name="B" label="Contact"
+                                            if:false={isCreateNew}></lightning-accordion-section>
+
+                                    </div>
+                                    <div class="col2">
+                                        <div class="createPanel">
+                                            <div class="header runtime_sales_leadConvertCreatePanelDesktop slds-p-around_x-small" >
+                                                <span class="slds-radio">
+                                                    <input type="radio" id="radio-63" value="radio-63" name="default1"
+                                                        checked="" />
+                                                    <label class="slds-radio__label" for="radio-63">
+                                                        <span class="slds-radio_faux"></span>
+                                                        <span class="slds-form-element__label">Create New</span>
+                                                    </label>
+                                                </span>
+                                            </div>
+                                            <div
+                                                class="createPanelDetail runtime_sales_leadConvertCreatePanelDesktop">
+                                                <div class="createPanelExpanded">
+                                                    <div>
+                                                        <div
+                                                            class="uiInput uiInputText uiInput--default uiInput--input slds-p-around_small">
+                                                            <label class="uiLabel-left form-element__label uiLabel">
+                                                                <span class=""></span><span title="required"
+                                                                    class="required "></span>
+                                                            </label>
+                                                            <!--input aria-describedby="" placeholder="" type="text"
+                                                                value={contactName} onchange={handleConNameChange}
+                                                                class=" input" required="" data-interactive-lib-uid="13"
+                                                                aria-required="true"-->
+                                                            <lightning-input-name 
+                                                                first-name={contactFirstName}
+                                                                last-name={contactLastName} 
+                                                                onchange={handleConNameChange}
+                                                                informal-name="Hi" suffix="Developer"
+                                                                salutation={salutation} 
+                                                                options={salutationOptions}>
+                                                           </lightning-input-name>
+                                                        </div>
+                                                    </div>
+                                                    <div class="recordType"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div aria-hidden="true" class="col3">
+                                        <div class="divisor"><span>- OR -</span></div>
+                                        <div class="vertical-line"></div>
+                                    </div>
+                                    <div class="col4">
+                                        <div class="matchPanel">
+                                            <div class="runtime_sales_leadConvertMatchPanelDesktop">
+                                                <div class="header">
+                                                    <span class="slds-radio">
+                                                        <input type="radio" id="radio-64" value="radio-64"
+                                                            name="default1" />
+                                                        <label class="slds-radio__label" for="radio-64">
+                                                            <span class="slds-radio_faux"></span>
+                                                            <span class="slds-form-element__label">Choose
+                                                                Existing</span>
+                                                        </label>
+                                                    </span>
+                                                </div>
+                                                <div class="matchPanelDetail">
+                                                    <div class="">
+                                                        <div>
+                                                            <div
+                                                                class="uiInput forceSearchInputLookupDesktop uiInput--default">
+                                                                <label class="uiLabel-left form-element__label uiLabel">
+                                                                    <span class=""></span>
+                                                                </label>
+                                                                <div class="contentWrapper ">
+                                                                    <div
+                                                                        class="inputWrapper slds-grid slds-grid_vertical-align-center slds-p-right_x-small">
+                                                                        <div class="autocompleteWrapper slds-grow">
+                                                                            <!--<input role="combobox" aria-autocomplete="list" maxlength="500" aria-expanded="false" aria-haspopup="true" type="text" aria-describedby=""  class=" default input uiInput uiInputTextForAutocomplete uiInput--default uiInput--input uiInput uiAutocomplete uiInput--default uiInput--lookup" aria-activedescendant="" data-interactive-lib-uid="5" spellcheck="false" autocomplete="off" autocorrect="off" title="Search for matching accounts" placeholder="Search for matching accounts">-->
+                                                                            <lightning-input type="search"
+                                                                                id="combobox-id-18" value={conName}
+                                                                                onchange={searchHandleContactKeyChange}
+                                                                                onkeydown={searchHandleContactClick}
+                                                                                onclick={searchHandleContactClick}
+                                                                                onblur={searchHandleContactClick}
+                                                                                aria-activedescendant="option1"
+                                                                                label='Existing Contact'
+                                                                                aria-autocomplete="list"
+                                                                                aria-controls="listbox-id-12"
+                                                                                role="textbox"
+                                                                                placeholder="Search..."></lightning-input>
+                                                                        </div>
+                                                                        <div if:true={messageResult}>
+                                                                            0 Contact Matches detected!
+                                                                        </div>
+                                                                        <!-- Display search results -->
+                                                                        <template if:true={showSearchedValues}>
+                                                                            <div class="slds-box"
+                                                                                style="height: 130px; overflow-y: scroll;">
+                                                                                <ul class="" role="">
+                                                                                    <template for:each={contactList}
+                                                                                        for:item="conObj">
+                                                                                        <li class="slds-p-around_x-small"
+                                                                                            style="cursor: pointer;"
+                                                                                            key={conObj.Id}
+                                                                                            onclick={parentHandleContactAction}
+                                                                                            data-value={conObj.Id}
+                                                                                            data-label={conObj.Name}>
+                                                                                            {conObj.Name}
+                                                                                        </li>
+                                                                                    </template>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </template>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="slds-hidden">
+                                                                    <lightning-icon icon-name="utility:info_alt"
+                                                                        class="slds-icon-utility-info-alt slds-icon_container">
+                                                                        <span part="boundary">
+                                                                            <lightning-primitive-icon>
+                                                                                <svg class="slds-icon slds-icon_xx-small"
+                                                                                    focusable="false"
+                                                                                    data-key="info_alt"
+                                                                                    aria-hidden="true"
+                                                                                    viewBox="0 0 52 52" part="icon">
+                                                                                </svg>
+                                                                            </lightning-primitive-icon>
+                                                                        </span>
+                                                                    </lightning-icon>
+                                                                </div>
+                                                                <section class="slds-is-open slds-p-left_x-small">
+                                                                    <lightning-input type="checkbox" label="Don't create a contact
+                                                                     upon conversion" checked={SkipContact}
+                                                                        onchange={handleCheckboxChange}></lightning-input></section>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </template>
+                </lightning-accordion-section>
+
+                <lightning-accordion-section name="c" label="Opportunity">
+                    <template if:false={SkipOpportunity}>
+                        <fieldset class="slds-form-element runtime_sales_leadConvertSectionDesktop">
+                            <legend class="slds-form-element__legend slds-form-element__label slds-assistive-text">
+                                Opportunity
+                            </legend>
+                            <div class="slds-form-element__control">
+                                <div style="display: flex" class="entityPanel slds-box_border expand">
+                                    <div class="col1">
+                                        <lightning-accordion-section name="C" label="Opportunity"
+                                            if:true={isCreateNew}></lightning-accordion-section>
+                                        <lightning-accordion-section name="C" label="Opportunity"
+                                            if:false={isCreateNew}></lightning-accordion-section>
+                                    </div>
+                                    <div class="col2">
+                                        <div class="createPanel">
+                                            <div class="header runtime_sales_leadConvertCreatePanelDesktop slds-p-around_small">
+                                                <span class="slds-radio">
+                                                    <input type="radio" id="radio-65" value="radio-65" name="default2"
+                                                        checked="" />
+                                                    <label class="slds-radio__label" for="radio-65">
+                                                        <span class="slds-radio_faux"></span>
+                                                        <span class="slds-form-element__label">Create New</span>
+                                                    </label>
+                                                </span>
+                                            </div>
+                                            <div
+                                                class="createPanelDetail slds-box_border runtime_sales_leadConvertCreatePanelDesktop">
+                                                <div class="createPanelExpanded">
+                                                    <div>
+                                                        <div
+                                                            class="uiInput uiInputText uiInput--default uiInput--input">
+                                                            <label class="uiLabel-left form-element__label uiLabel">
+                                                                <span class=""></span><span title="required"
+                                                                    class="required "></span>
+                                                            </label>
+                                                            <input aria-describedby="" placeholder="" type="text"
+                                                                value={opportunityName} onchange={handleOppNameChange}
+                                                                class=" input" required="" data-interactive-lib-uid="13"
+                                                                aria-required="true">
+                                                        </div>
+                                                    </div>
+                                                    <div class="recordType"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div aria-hidden="true" class="col3">
+                                        <div class="divisor"><span>- OR -</span></div>
+                                        <div class="vertical-line"></div>
+                                    </div>
+                                    <div class="col4">
+                                        <div class="matchPanel">
+                                            <div class="runtime_sales_leadConvertMatchPanelDesktop">
+                                                <div class="header">
+                                                    <span class="slds-radio">
+                                                        <input type="radio" id="radio-66" value="radio-66"
+                                                            name="default2" />
+                                                        <label class="slds-radio__label" for="radio-66">
+                                                            <span class="slds-radio_faux"></span>
+                                                            <span class="slds-form-element__label">Choose
+                                                                Existing</span>
+                                                        </label>
+                                                    </span>
+                                                </div>
+                                                <div class="matchPanelDetail">
+                                                    <div class="">
+                                                        <div>
+                                                            <div
+                                                                class="uiInput forceSearchInputLookupDesktop uiInput--default">
+                                                                <label class="uiLabel-left form-element__label uiLabel">
+                                                                    <span class=""></span>
+                                                                </label>
+                                                                <div class="contentWrapper">
+                                                                    <div
+                                                                        class="inputWrapper slds-grid slds-grid_vertical-align-center slds-p-right_x-small">
+                                                                        <div class="autocompleteWrapper slds-grow">
+                                                                            <lightning-input type="search"
+                                                                                id="combobox-id-20" value={oppName}
+                                                                                onchange={searchHandleOpportunityKeyChange}
+                                                                                onkeydown={searchHandleOpportunityClick}
+                                                                                onclick={searchHandleOpportunityClick}
+                                                                                onblur={searchHandleOpportunityClick}
+                                                                                aria-activedescendant="option1"
+                                                                                label='Existing Opportunity'
+                                                                                aria-autocomplete="list"
+                                                                                aria-controls="listbox-id-12"
+                                                                                role="textbox"
+                                                                                placeholder="To find opportunity, choose an existing account"></lightning-input>
+                                                                        </div>
+                                                                        <div if:true={messageResult}>
+                                                                            No Result Found!
+                                                                        </div>
+                                                                        <!-- Display search results -->
+                                                                        <template if:true={showSearchedValues}>
+                                                                            <div class="slds-box"
+                                                                                style="height: 130px; overflow-y: scroll;">
+                                                                                <ul class="" role="">
+                                                                                    <template for:each={opportunityList}
+                                                                                        for:item="oppObj">
+                                                                                        <li class="slds-p-around_x-small"
+                                                                                            style="cursor: pointer;"
+                                                                                            key={oppObj.Id}
+                                                                                            onclick={parentHandleOpportunityAction}
+                                                                                            data-value={oppObj.Id}
+                                                                                            data-label={oppObj.Name}>
+                                                                                            {oppObj.Name}
+                                                                                        </li>
+                                                                                    </template>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </template>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="slds-hidden">
+                                                                    <lightning-icon icon-name="utility:info_alt"
+                                                                        class="slds-icon-utility-info-alt slds-icon_container">
+                                                                        <span part="boundary">
+                                                                            <lightning-primitive-icon>
+                                                                                <svg class="slds-icon slds-icon_xx-small"
+                                                                                    focusable="false"
+                                                                                    data-key="info_alt"
+                                                                                    aria-hidden="true"
+                                                                                    viewBox="0 0 52 52" part="icon">
+                                                                                </svg>
+                                                                            </lightning-primitive-icon>
+                                                                        </span>
+                                                                    </lightning-icon>
+                                                                </div>
+                                                                <section></section><lightning-input type="checkbox" label="Don't create an opportunity upon conversion" checked={SkipOpportunity} onchange={handleCheckboxChange}></lightning-input></section>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </template>
+                </lightning-accordion-section>
+
+                <div class="slds-card">
+                    <div class="slds-card__body slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2">
+                            <div class="uiInput uiInputText uiInput--default uiInput--input">
+                                <label class="uiLabel-left form-element__label uiLabel">
+                                    <span class="">Record Owner</span><span title="required" class="required ">*</span>
+                                </label>
+                                <input aria-describedby="" placeholder="" type="text" value={OwnerName} class=" input"
+                                    required="" data-interactive-lib-uid="13" aria-required="true">
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-combobox name="Converted Status" label="Converted Status" value={value}
+                                options={options} onchange={handleChange}>
+                            </lightning-combobox>
+                        </div>
+                    </div>
+                </div>
+            </lightning-accordion>
+            </div>
+        </div>
+        <div  class="modal-footer slds-modal__footer" style="width: 935px;">
+        <div class="slds-grid slds-grid_align-center">
+        <lightning-button label="Cancel" variant="neutral" onclick={closeAction} class="slds-m-left_x-small"></lightning-button>
+        <lightning-button variant="brand" label="Convert" onclick={convertLead}
+            class="slds-m-left_x-small"></lightning-button>
+    </div>
+    </div>   
+</template>
